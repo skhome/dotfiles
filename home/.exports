@@ -1,0 +1,12 @@
+# make vim the default editor
+export EDITOR="vim"
+
+# change theme for oh-my-zsh colorize plugin
+export ZSH_COLORIZE_STYLE="solarized-dark"
+
+# User configuration
+export DEFAULT_USER="sascha"
+
+# prefer US English and use UTF-8
+export LC_ALL="en_US.UTF-8"
+export LANG="en_US"

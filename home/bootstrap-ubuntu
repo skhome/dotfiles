@@ -1,0 +1,54 @@
+#!/bin/bash -ex
+
+# Paste this into ssh
+# curl -sL https://gist.github.com/XXX/raw/bootstrap_homeshick.sh | tar -xzO | /bin/bash -ex
+# When forking, you can get the URL from the raw (<>) button.
+
+### set some command variables depending on whether we are root or not
+apt="sudo apt"
+chsh="sudo chsh"
+snap="sudo snap"
+username=$(whoami)
+if [ "${username}" = "root" ]; then
+	aptget='apt'
+	chsh='chsh'
+	snap="snap"
+fi
+
+### install git and some other tools
+$apt update
+$apt install -y zsh tmux vim git curl tree tldr python-pip net-tools
+
+# install python packages
+pip install --user pygments
+
+### trust github
+mkdir -p ${HOME}/.ssh && chmod 700 ${HOME}/.ssh
+cat <<EOF > ${HOME}/.ssh/known_hosts
+|1|8HCq19xhdQZkOuQhMroGsRVzS8o=|jCJNgVsA/oCNcP649asbJqL6ZXc= ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAq2A7hRGmdnm9tUDbO9IDSwBK6TbQa+PXYPCPy6rbTrTtw7PHkccKrpp0yVhp5HdEIcKr6pLlVDBfOLX9QUsyCOV0wzfjIJNlGEYsdlLJizHhbn2mUjvSAHQqZETYP81eFzLQNnPHt4EVVUh7VfDESU84KezmD5QlWpXLmvU31/yMf+Se8xhHTvKSCZIFImWwoG6mbUoWf9nzpIoaSjB+weqqUUmpaaasXVal72J+UX2B+2RPW3RcT0eOzQgqlJL3RKrTJvdsjE3JEAvGq3lGHSZXy28G3skua2SmVi/w4yCE6gbODqnTWlg7+wC604ydGXA8VJiS5ap43JXiUFFAaQ==
+|1|Ve7DzQkvA9ImK270tJWff9JDILk=|QJ/9F7D9HXc1UY9TOveoiMhEpjI= ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAq2A7hRGmdnm9tUDbO9IDSwBK6TbQa+PXYPCPy6rbTrTtw7PHkccKrpp0yVhp5HdEIcKr6pLlVDBfOLX9QUsyCOV0wzfjIJNlGEYsdlLJizHhbn2mUjvSAHQqZETYP81eFzLQNnPHt4EVVUh7VfDESU84KezmD5QlWpXLmvU31/yMf+Se8xhHTvKSCZIFImWwoG6mbUoWf9nzpIoaSjB+weqqUUmpaaasXVal72J+UX2B+2RPW3RcT0eOzQgqlJL3RKrTJvdsjE3JEAvGq3lGHSZXy28G3skua2SmVi/w4yCE6gbODqnTWlg7+wC604ydGXA8VJiS5ap43JXiUFFAaQ==
+EOF
+
+# install oh-my-zsh and change default shell to zsh
+if [ ! -d ${HOME}/.oh-my-zsh ]; then
+	rm -rf /tmp/install.sh
+	wget -P /tmp https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh
+	sh /tmp/install.sh --unattended
+	$chsh --shell /bin/zsh "${username}"
+fi
+
+### install homeshick
+if [ ! -d "${HOME}/.homesick/repos/homeshick" ]; then
+    git clone git://github.com/andsens/homeshick.git "${HOME}/.homesick/repos/homeshick"
+fi
+source ${HOME}/.homesick/repos/homeshick/homeshick.sh
+
+# initialize ssh-agent
+eval $(ssh-agent -s)
+
+
+
+
+# install coding tools via snap
+$snap install --classic code
+$snap install spotify
