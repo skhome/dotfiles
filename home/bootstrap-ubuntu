@@ -15,14 +15,17 @@ if [ "${username}" = "root" ]; then
 	snap="snap"
 fi
 
-### install git and some other tools
+# create folder for some personal executables
+mkdir -p ${HOME}/bin
+
+# install git and some other tools
 $apt update
 $apt install -y zsh tmux vim git curl tree tldr python-pip net-tools
 
 # install python packages
 pip install --user pygments
 
-### trust github
+# trust github
 mkdir -p ${HOME}/.ssh && chmod 700 ${HOME}/.ssh
 cat <<EOF > ${HOME}/.ssh/known_hosts
 |1|8HCq19xhdQZkOuQhMroGsRVzS8o=|jCJNgVsA/oCNcP649asbJqL6ZXc= ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAq2A7hRGmdnm9tUDbO9IDSwBK6TbQa+PXYPCPy6rbTrTtw7PHkccKrpp0yVhp5HdEIcKr6pLlVDBfOLX9QUsyCOV0wzfjIJNlGEYsdlLJizHhbn2mUjvSAHQqZETYP81eFzLQNnPHt4EVVUh7VfDESU84KezmD5QlWpXLmvU31/yMf+Se8xhHTvKSCZIFImWwoG6mbUoWf9nzpIoaSjB+weqqUUmpaaasXVal72J+UX2B+2RPW3RcT0eOzQgqlJL3RKrTJvdsjE3JEAvGq3lGHSZXy28G3skua2SmVi/w4yCE6gbODqnTWlg7+wC604ydGXA8VJiS5ap43JXiUFFAaQ==
@@ -37,16 +40,20 @@ if [ ! -d ${HOME}/.oh-my-zsh ]; then
 	$chsh --shell /bin/zsh "${username}"
 fi
 
-### install homeshick
+# install homeshick
 if [ ! -d "${HOME}/.homesick/repos/homeshick" ]; then
     git clone git://github.com/andsens/homeshick.git "${HOME}/.homesick/repos/homeshick"
 fi
 source ${HOME}/.homesick/repos/homeshick/homeshick.sh
 
+# install diff-so-fancy
+if [ ! -f ${HOME}/bin/diff-so-fancy ]; then
+	wget -P ${HOME}/bin https://raw.githubusercontent.com/so-fancy/diff-so-fancy/master/third_party/build_fatpack/diff-so-fancy
+	chmod 755 ${HOME}/bin/diff-so-fancy
+fi
+
 # initialize ssh-agent
-eval $(ssh-agent -s)
-
-
+# eval $(ssh-agent -s)
 
 
 # install coding tools via snap
