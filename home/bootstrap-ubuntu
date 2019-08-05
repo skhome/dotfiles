@@ -52,10 +52,15 @@ if [ ! -f ${HOME}/bin/diff-so-fancy ]; then
 	chmod 755 ${HOME}/bin/diff-so-fancy
 fi
 
+# install nvm
+if [ ! -d ${HOME}/.nvm ]; then
+	wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
+fi
+
 # initialize ssh-agent
 # eval $(ssh-agent -s)
 
 
 # install coding tools via snap
-$snap install --classic code
+$snap install --classic code intellij-idea-ultimate
 $snap install spotify

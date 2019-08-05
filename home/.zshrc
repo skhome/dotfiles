@@ -68,7 +68,7 @@ DISABLE_UNTRACKED_FILES_DIRTY="true"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git colorize command-not-found copyfile history z gradle)
+plugins=(git colorize command-not-found history z gradle nvm)
 
 # setup homeshick
 source "$HOME/.homesick/repos/homeshick/homeshick.sh"
