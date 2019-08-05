@@ -26,11 +26,13 @@ $apt install -y zsh tmux vim git curl tree tldr python-pip net-tools
 pip install --user pygments
 
 # trust github
-mkdir -p ${HOME}/.ssh && chmod 700 ${HOME}/.ssh
-cat <<EOF > ${HOME}/.ssh/known_hosts
-|1|8HCq19xhdQZkOuQhMroGsRVzS8o=|jCJNgVsA/oCNcP649asbJqL6ZXc= ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAq2A7hRGmdnm9tUDbO9IDSwBK6TbQa+PXYPCPy6rbTrTtw7PHkccKrpp0yVhp5HdEIcKr6pLlVDBfOLX9QUsyCOV0wzfjIJNlGEYsdlLJizHhbn2mUjvSAHQqZETYP81eFzLQNnPHt4EVVUh7VfDESU84KezmD5QlWpXLmvU31/yMf+Se8xhHTvKSCZIFImWwoG6mbUoWf9nzpIoaSjB+weqqUUmpaaasXVal72J+UX2B+2RPW3RcT0eOzQgqlJL3RKrTJvdsjE3JEAvGq3lGHSZXy28G3skua2SmVi/w4yCE6gbODqnTWlg7+wC604ydGXA8VJiS5ap43JXiUFFAaQ==
-|1|Ve7DzQkvA9ImK270tJWff9JDILk=|QJ/9F7D9HXc1UY9TOveoiMhEpjI= ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAq2A7hRGmdnm9tUDbO9IDSwBK6TbQa+PXYPCPy6rbTrTtw7PHkccKrpp0yVhp5HdEIcKr6pLlVDBfOLX9QUsyCOV0wzfjIJNlGEYsdlLJizHhbn2mUjvSAHQqZETYP81eFzLQNnPHt4EVVUh7VfDESU84KezmD5QlWpXLmvU31/yMf+Se8xhHTvKSCZIFImWwoG6mbUoWf9nzpIoaSjB+weqqUUmpaaasXVal72J+UX2B+2RPW3RcT0eOzQgqlJL3RKrTJvdsjE3JEAvGq3lGHSZXy28G3skua2SmVi/w4yCE6gbODqnTWlg7+wC604ydGXA8VJiS5ap43JXiUFFAaQ==
-EOF
+if [ ! -d ${HOME}/.ssh ]; then
+	mkdir -p ${HOME}/.ssh
+	chmod 700 ${HOME}/.ssh
+	echo "|1|8HCq19xhdQZkOuQhMroGsRVzS8o=|jCJNgVsA/oCNcP649asbJqL6ZXc= ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAq2A7hRGmdnm9tUDbO9IDSwBK6TbQa+PXYPCPy6rbTrTtw7PHkccKrpp0yVhp5HdEIcKr6pLlVDBfOLX9QUsyCOV0wzfjIJNlGEYsdlLJizHhbn2mUjvSAHQqZETYP81eFzLQNnPHt4EVVUh7VfDESU84KezmD5QlWpXLmvU31/yMf+Se8xhHTvKSCZIFImWwoG6mbUoWf9nzpIoaSjB+weqqUUmpaaasXVal72J+UX2B+2RPW3RcT0eOzQgqlJL3RKrTJvdsjE3JEAvGq3lGHSZXy28G3skua2SmVi/w4yCE6gbODqnTWlg7+wC604ydGXA8VJiS5ap43JXiUFFAaQ==" >> ${HOME}/.ssh/known_hosts
+	echo "|1|Ve7DzQkvA9ImK270tJWff9JDILk=|QJ/9F7D9HXc1UY9TOveoiMhEpjI= ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAq2A7hRGmdnm9tUDbO9IDSwBK6TbQa+PXYPCPy6rbTrTtw7PHkccKrpp0yVhp5HdEIcKr6pLlVDBfOLX9QUsyCOV0wzfjIJNlGEYsdlLJizHhbn2mUjvSAHQqZETYP81eFzLQNnPHt4EVVUh7VfDESU84KezmD5QlWpXLmvU31/yMf+Se8xhHTvKSCZIFImWwoG6mbUoWf9nzpIoaSjB+weqqUUmpaaasXVal72J+UX2B+2RPW3RcT0eOzQgqlJL3RKrTJvdsjE3JEAvGq3lGHSZXy28G3skua2SmVi/w4yCE6gbODqnTWlg7+wC604ydGXA8VJiS5ap43JXiUFFAaQ==" >> ${HOME}/.ssh/known_hosts
+	chmod 600 ${HOME}/.ssh/known_hosts
+fi
 
 # install oh-my-zsh and change default shell to zsh
 if [ ! -d ${HOME}/.oh-my-zsh ]; then
@@ -46,6 +48,12 @@ if [ ! -d "${HOME}/.homesick/repos/homeshick" ]; then
 fi
 source ${HOME}/.homesick/repos/homeshick/homeshick.sh
 
+# install dotfiles
+if [ ! -d "${HOME}/.homesick/repos/dotfiles-ubuntu" ]; then
+	homeshick clone --batch skhome/dotfiles-ubuntu
+fi
+homeshick link --force
+
 # install diff-so-fancy
 if [ ! -f ${HOME}/bin/diff-so-fancy ]; then
 	wget -P ${HOME}/bin https://raw.githubusercontent.com/so-fancy/diff-so-fancy/master/third_party/build_fatpack/diff-so-fancy
@@ -56,10 +64,6 @@ fi
 if [ ! -d ${HOME}/.nvm ]; then
 	wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
 fi
-
-# initialize ssh-agent
-# eval $(ssh-agent -s)
-
 
 # install coding tools via snap
 $snap install --classic code intellij-idea-ultimate

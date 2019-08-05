@@ -86,3 +86,6 @@ do
 	[ -r "$file" ] && source "$file"
 done
 unset file
+
+# reload all autocompletions
+compinit
