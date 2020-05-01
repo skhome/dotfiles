@@ -1,5 +1,5 @@
 # If you come from bash you might have to change your $PATH.
-export PATH=${HOME}/bin:${HOME}/.local/bin:/usr/local/bin:/snap/bin:${PATH}
+export PATH=${HOME}/bin:${HOME}/.local/bin:/snap/bin:${PATH}
 
 # Path to your oh-my-zsh installation.
 export ZSH="/home/sascha/.oh-my-zsh"
@@ -68,7 +68,7 @@ DISABLE_UNTRACKED_FILES_DIRTY="true"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git colorize command-not-found history z gradle nvm)
+plugins=(git colorize command-not-found history z nvm vscode) 
 
 # setup homeshick
 source "$HOME/.homesick/repos/homeshick/homeshick.sh"
@@ -89,3 +89,8 @@ unset file
 
 # reload all autocompletions
 compinit
+
+
+#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
+export SDKMAN_DIR="/home/sascha/.sdkman"
+[[ -s "/home/sascha/.sdkman/bin/sdkman-init.sh" ]] && source "/home/sascha/.sdkman/bin/sdkman-init.sh"

@@ -20,7 +20,7 @@ mkdir -p ${HOME}/bin
 
 # install git and some other tools
 $apt update
-$apt install -y zsh tmux vim git curl tree tldr python-pip net-tools
+$apt install -y zsh tmux vim git curl tree tldr python-pip net-tools apt-transport-https ca-certificates gnupg-agent software-properties-common jq gnome-keyring
 
 # install python packages
 pip install --user pygments
@@ -65,6 +65,17 @@ if [ ! -d ${HOME}/.nvm ]; then
 	wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
 fi
 
+# install docker
+if [ ! -x "$(command -v docker)" ]; then
+	curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+	sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+	$apt install docker-ce docker-ce-cli containerd.io docker-compose
+	sudo groupadd docker
+	sudo usermod -aG docker $username
+fi
+
 # install coding tools via snap
-$snap install --classic code intellij-idea-ultimate
+$snap install --classic code
+$snap install --classic intellij-idea-ultimate
 $snap install spotify
+$snap install --beta thunderbird
